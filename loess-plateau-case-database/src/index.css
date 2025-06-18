@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    
+    /* 生态主题色彩变量 */
+    --primary-color: #2d6a4f;
+    --secondary-color: #40916c;
+    --tertiary-color: #52b788;
+    --quaternary-color: #74c69d;
+    --light-color: #b7e4c7;
+    --background-color: #f8f9fa;
+    --text-color: #212529;
+    --secondary-text: #495057;
+    --border-color: #dee2e6;
+    --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+    --transition-standard: all 0.3s ease;
+    --header-height: 70px;
+    --sidebar-width: 280px;
+    
+    /* Radix UI 变量 */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 210 40% 98%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 142 76% 36%;
+    
+    /* Sidebar 变量 */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 142 76% 36%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 142 20% 95%;
+    --sidebar-accent-foreground: 142 76% 36%;
+    --sidebar-border: 142 20% 90%;
+    --sidebar-ring: 142 76% 36%;
+  }
+
+  .dark {
+    /* 深色主题变量 */
+    --primary-color: #2d6a4f;
+    --secondary-color: #40916c;
+    --tertiary-color: #52b788;
+    --quaternary-color: #74c69d;
+    --light-color: #1b4332;
+    --background-color: #121212;
+    --text-color: #f8f9fa;
+    --secondary-text: #adb5bd;
+    --border-color: #495057;
+    --card-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    
+    /* Radix UI 深色变量 */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 142 76% 36%;
+    
+    /* Sidebar 深色变量 */
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 142 76% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 142 76% 36%;
+  }
+  
+  body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    transition: var(--transition-standard);
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 600;
+  }
+}
+
+@layer utilities {
+  /* 自定义实用类 */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .eco-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--tertiary-color));
+  }
+  
+  .eco-card {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-standard);
+  }
+  
+  .eco-card:hover {
+    box-shadow: 0 1rem 2rem rgba(45, 106, 79, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+img {
+  object-position: top;
+}

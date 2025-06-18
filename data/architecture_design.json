@@ -1,0 +1,640 @@
+{
+  "deployment_architecture": {
+    "overview": "基于现代云服务的三层分离架构",
+    "components": {
+      "github_pages": {
+        "role": "静态前端托管",
+        "responsibilities": [
+          "托管React/Vue.js构建后的静态文件",
+          "提供CDN加速的全球访问",
+          "SSL/TLS加密",
+          "Git版本控制集成"
+        ],
+        "configuration": {
+          "custom_domain": "案例库自定义域名",
+          "https_enforcement": true,
+          "build_process": "GitHub Actions自动构建部署"
+        }
+      },
+      "vercel": {
+        "role": "无服务器后端和API层",
+        "responsibilities": [
+          "API路由处理",
+          "AI服务集成",
+          "文件上传处理",
+          "图片处理和优化",
+          "缓存管理"
+        ],
+        "configuration": {
+          "runtime": "Node.js 18+",
+          "regions": [
+            "sin1",
+            "hkg1"
+          ],
+          "environment_variables": [
+            "SUPABASE_URL",
+            "SUPABASE_ANON_KEY",
+            "SUPABASE_SERVICE_KEY",
+            "AI_API_KEYS"
+          ]
+        }
+      },
+      "supabase": {
+        "role": "数据库和用户认证",
+        "responsibilities": [
+          "PostgreSQL数据库",
+          "用户认证和授权",
+          "实时数据同步",
+          "文件存储",
+          "Row Level Security (RLS)"
+        ],
+        "configuration": {
+          "database_region": "Singapore",
+          "backup_retention": "30天",
+          "connection_pooling": true
+        }
+      }
+    },
+    "data_flow": {
+      "user_access": "用户 → GitHub Pages → Vercel API → Supabase",
+      "admin_management": "管理员 → Vercel API → Supabase → 数据更新",
+      "ai_services": "前端请求 → Vercel API → AI服务 → 结果返回"
+    },
+    "advantages": [
+      "成本效益高（大部分免费额度内）",
+      "自动扩展和负载均衡",
+      "全球CDN加速",
+      "Git工作流集成",
+      "企业级安全性"
+    ]
+  },
+  "frontend_architecture": {
+    "framework_selection": {
+      "recommended": "Vue.js 3 + Vite",
+      "reasoning": [
+        "学习曲线平缓，适合现有Bootstrap项目迁移",
+        "组件化开发，便于维护",
+        "优秀的TypeScript支持",
+        "Vite提供快速的开发体验"
+      ],
+      "alternative": "React + Next.js"
+    },
+    "component_structure": {
+      "layout_components": [
+        "AppHeader.vue - 导航栏组件",
+        "AppSidebar.vue - 侧边栏组件（管理系统）",
+        "AppFooter.vue - 页脚组件",
+        "ThemeToggle.vue - 主题切换组件"
+      ],
+      "business_components": [
+        "CaseCard.vue - 案例展示卡片",
+        "CaseSearch.vue - 搜索筛选组件",
+        "CaseDetail.vue - 案例详情组件",
+        "ChartDisplay.vue - 图表展示组件",
+        "ImageGallery.vue - 图片展示组件",
+        "FileUpload.vue - 文件上传组件"
+      ],
+      "ai_components": [
+        "AISearchBox.vue - AI智能搜索",
+        "AIImageGenerator.vue - AI图片生成",
+        "AIContentGenerator.vue - AI内容生成",
+        "AIAssistant.vue - AI助手界面"
+      ]
+    },
+    "state_management": {
+      "solution": "Pinia",
+      "stores": [
+        "useAuthStore - 用户认证状态",
+        "useCaseStore - 案例数据管理",
+        "useThemeStore - 主题状态",
+        "useAIStore - AI功能状态"
+      ]
+    },
+    "routing_structure": {
+      "public_routes": [
+        "/ - 首页",
+        "/cases - 案例库",
+        "/case/:id - 案例详情",
+        "/about - 关于页面"
+      ],
+      "admin_routes": [
+        "/admin - 管理首页",
+        "/admin/cases - 案例管理",
+        "/admin/upload - 文件上传",
+        "/admin/ai - AI功能管理"
+      ]
+    },
+    "styling_approach": {
+      "css_framework": "保留Bootstrap 5",
+      "enhancement": "Tailwind CSS作为补充",
+      "organization": [
+        "styles/variables.css - CSS变量定义",
+        "styles/components.css - 组件样式",
+        "styles/themes.css - 主题变量",
+        "styles/responsive.css - 响应式样式"
+      ]
+    },
+    "migration_from_current": {
+      "phase_1": "保留现有样式和布局",
+      "phase_2": "逐步组件化关键功能",
+      "phase_3": "优化和增强用户体验",
+      "preserved_features": [
+        "绿色生态主题设计",
+        "响应式布局",
+        "深色模式支持",
+        "现有交互逻辑"
+      ]
+    }
+  },
+  "backend_architecture": {
+    "serverless_api": {
+      "platform": "Vercel Functions",
+      "language": "Node.js with TypeScript",
+      "structure": {
+        "api/auth/": [
+          "login.ts - 用户登录",
+          "register.ts - 用户注册",
+          "refresh.ts - token刷新"
+        ],
+        "api/cases/": [
+          "index.ts - 案例列表查询",
+          "[id].ts - 案例详情",
+          "create.ts - 创建案例",
+          "update.ts - 更新案例",
+          "delete.ts - 删除案例"
+        ],
+        "api/upload/": [
+          "image.ts - 图片上传",
+          "file.ts - 文件上传",
+          "batch.ts - 批量上传"
+        ],
+        "api/ai/": [
+          "search-images.ts - AI图片搜索",
+          "generate-content.ts - AI内容生成",
+          "generate-image.ts - AI图片生成",
+          "analyze-text.ts - AI文本分析"
+        ]
+      }
+    },
+    "middleware": [
+      "cors.ts - 跨域处理",
+      "auth.ts - 身份验证",
+      "rateLimit.ts - 限流保护",
+      "errorHandler.ts - 错误处理",
+      "logger.ts - 日志记录"
+    ],
+    "external_integrations": {
+      "ai_services": [
+        "OpenAI API - GPT模型",
+        "Stability AI - 图片生成",
+        "Unsplash API - 图片搜索",
+        "百度AI API - 中文处理"
+      ],
+      "storage_services": [
+        "Supabase Storage - 文件存储",
+        "Cloudinary - 图片处理"
+      ]
+    },
+    "caching_strategy": {
+      "levels": [
+        "Browser Cache - 静态资源",
+        "CDN Cache - API响应",
+        "Application Cache - 数据库查询",
+        "Database Cache - 查询结果"
+      ],
+      "cache_keys": [
+        "cases:list:{filters}",
+        "case:detail:{id}",
+        "ai:images:{query}",
+        "stats:overview"
+      ]
+    }
+  },
+  "database_design": {
+    "database_platform": "Supabase PostgreSQL",
+    "tables": {
+      "users": {
+        "description": "用户表",
+        "columns": [
+          "id (UUID, PK) - 用户ID",
+          "email (VARCHAR) - 邮箱",
+          "username (VARCHAR) - 用户名",
+          "role (ENUM) - 角色 (admin, editor, viewer)",
+          "avatar_url (TEXT) - 头像URL",
+          "created_at (TIMESTAMP) - 创建时间",
+          "updated_at (TIMESTAMP) - 更新时间"
+        ],
+        "indexes": [
+          "email",
+          "username"
+        ],
+        "rls_policy": "用户只能查看和修改自己的信息"
+      },
+      "cases": {
+        "description": "案例表",
+        "columns": [
+          "id (UUID, PK) - 案例ID",
+          "title (VARCHAR) - 案例标题",
+          "subtitle (VARCHAR) - 副标题",
+          "description (TEXT) - 案例描述",
+          "content (JSONB) - 案例内容（富文本）",
+          "category (VARCHAR) - 分类",
+          "tags (TEXT[]) - 标签数组",
+          "location (JSONB) - 地理位置信息",
+          "project_scale (VARCHAR) - 项目规模",
+          "investment_amount (DECIMAL) - 投资金额",
+          "implementation_period (JSONB) - 实施周期",
+          "status (ENUM) - 状态 (draft, published, archived)",
+          "featured (BOOLEAN) - 是否精选",
+          "view_count (INTEGER) - 浏览次数",
+          "author_id (UUID, FK) - 作者ID",
+          "created_at (TIMESTAMP) - 创建时间",
+          "updated_at (TIMESTAMP) - 更新时间",
+          "published_at (TIMESTAMP) - 发布时间"
+        ],
+        "indexes": [
+          "category",
+          "tags",
+          "status",
+          "featured",
+          "published_at"
+        ],
+        "rls_policy": "已发布案例公开可见，草稿仅作者可见"
+      },
+      "case_images": {
+        "description": "案例图片表",
+        "columns": [
+          "id (UUID, PK) - 图片ID",
+          "case_id (UUID, FK) - 案例ID",
+          "url (TEXT) - 图片URL",
+          "thumbnail_url (TEXT) - 缩略图URL",
+          "alt_text (VARCHAR) - 替代文本",
+          "caption (TEXT) - 图片说明",
+          "sort_order (INTEGER) - 排序",
+          "file_size (INTEGER) - 文件大小",
+          "dimensions (JSONB) - 图片尺寸",
+          "is_cover (BOOLEAN) - 是否封面图",
+          "uploaded_by (UUID, FK) - 上传者ID",
+          "created_at (TIMESTAMP) - 上传时间"
+        ],
+        "indexes": [
+          "case_id",
+          "sort_order"
+        ],
+        "rls_policy": "与关联案例相同的可见性"
+      },
+      "categories": {
+        "description": "案例分类表",
+        "columns": [
+          "id (UUID, PK) - 分类ID",
+          "name (VARCHAR) - 分类名称",
+          "slug (VARCHAR) - URL友好名称",
+          "description (TEXT) - 分类描述",
+          "icon (VARCHAR) - 图标类名",
+          "color (VARCHAR) - 主题色",
+          "parent_id (UUID, FK) - 父分类ID",
+          "sort_order (INTEGER) - 排序",
+          "is_active (BOOLEAN) - 是否启用",
+          "created_at (TIMESTAMP) - 创建时间"
+        ],
+        "indexes": [
+          "slug",
+          "parent_id",
+          "sort_order"
+        ],
+        "rls_policy": "公开可见"
+      },
+      "ai_generated_content": {
+        "description": "AI生成内容记录表",
+        "columns": [
+          "id (UUID, PK) - 记录ID",
+          "content_type (ENUM) - 内容类型 (text, image, suggestion)",
+          "prompt (TEXT) - 生成提示",
+          "result (JSONB) - 生成结果",
+          "model_used (VARCHAR) - 使用的AI模型",
+          "case_id (UUID, FK) - 关联案例ID",
+          "user_id (UUID, FK) - 用户ID",
+          "api_cost (DECIMAL) - API成本",
+          "generation_time (INTEGER) - 生成耗时（毫秒）",
+          "created_at (TIMESTAMP) - 生成时间"
+        ],
+        "indexes": [
+          "content_type",
+          "case_id",
+          "user_id",
+          "created_at"
+        ],
+        "rls_policy": "用户仅可见自己的生成记录"
+      },
+      "system_settings": {
+        "description": "系统设置表",
+        "columns": [
+          "key (VARCHAR, PK) - 设置键",
+          "value (JSONB) - 设置值",
+          "description (TEXT) - 设置描述",
+          "is_public (BOOLEAN) - 是否公开",
+          "updated_by (UUID, FK) - 更新者",
+          "updated_at (TIMESTAMP) - 更新时间"
+        ],
+        "rls_policy": "公开设置可见，私有设置仅管理员可见"
+      }
+    },
+    "views": {
+      "case_stats": "案例统计视图",
+      "popular_cases": "热门案例视图",
+      "category_counts": "分类统计视图"
+    },
+    "functions": {
+      "search_cases": "全文搜索函数",
+      "update_view_count": "更新浏览次数函数",
+      "get_related_cases": "获取相关案例函数"
+    },
+    "triggers": {
+      "update_timestamps": "自动更新时间戳",
+      "sync_case_stats": "同步案例统计",
+      "validate_content": "内容验证"
+    }
+  },
+  "ai_integration": {
+    "ai_services_architecture": {
+      "service_provider_strategy": {
+        "primary": "OpenAI API",
+        "backup": "百度文心一言API",
+        "image_generation": "Stability AI",
+        "image_search": "Unsplash API + Google Vision API"
+      },
+      "api_management": {
+        "rate_limiting": "每用户每小时限制",
+        "cost_control": "月度预算限制",
+        "failover": "多服务商自动切换",
+        "caching": "结果缓存减少API调用"
+      }
+    },
+    "ai_features": {
+      "intelligent_search": {
+        "description": "AI驱动的案例智能搜索",
+        "implementation": [
+          "自然语言查询理解",
+          "语义相似度匹配",
+          "搜索结果智能排序",
+          "搜索建议和纠错"
+        ],
+        "api_integration": "OpenAI Embedding API",
+        "user_interface": "增强现有搜索框"
+      },
+      "image_search_generation": {
+        "description": "AI图片搜索和生成",
+        "implementation": [
+          "关键词图片搜索",
+          "图片内容理解",
+          "生态主题图片生成",
+          "图片智能标注"
+        ],
+        "api_integration": "Unsplash API + DALL-E",
+        "user_interface": "图片选择器组件"
+      },
+      "content_generation": {
+        "description": "AI辅助内容生成",
+        "implementation": [
+          "案例描述自动生成",
+          "技术方案建议",
+          "成效评估模板",
+          "报告摘要生成"
+        ],
+        "api_integration": "GPT-4 API",
+        "user_interface": "编辑器AI助手"
+      },
+      "data_analysis": {
+        "description": "AI数据分析和洞察",
+        "implementation": [
+          "案例数据统计分析",
+          "趋势预测",
+          "成功因素提取",
+          "最佳实践推荐"
+        ],
+        "api_integration": "自定义分析模型",
+        "user_interface": "分析报告仪表板"
+      }
+    },
+    "implementation_phases": {
+      "phase_1": {
+        "timeline": "1-2个月",
+        "features": [
+          "基础AI搜索",
+          "图片搜索"
+        ],
+        "priority": "高"
+      },
+      "phase_2": {
+        "timeline": "2-3个月",
+        "features": [
+          "内容生成",
+          "图片生成"
+        ],
+        "priority": "中"
+      },
+      "phase_3": {
+        "timeline": "3-4个月",
+        "features": [
+          "数据分析",
+          "智能推荐"
+        ],
+        "priority": "低"
+      }
+    },
+    "security_considerations": {
+      "api_key_management": "环境变量 + Vercel Secrets",
+      "user_input_validation": "防止提示注入攻击",
+      "content_filtering": "生成内容审核",
+      "usage_monitoring": "API使用量监控"
+    }
+  },
+  "security_measures": {
+    "authentication_authorization": {
+      "auth_provider": "Supabase Auth",
+      "supported_methods": [
+        "邮箱密码登录",
+        "OAuth (Google, GitHub)",
+        "微信登录（可选）"
+      ],
+      "jwt_configuration": {
+        "algorithm": "HS256",
+        "expiration": "1小时",
+        "refresh_token": "30天"
+      },
+      "role_based_access": {
+        "admin": "完全访问权限",
+        "editor": "内容编辑权限",
+        "viewer": "仅查看权限"
+      }
+    },
+    "data_protection": {
+      "encryption": {
+        "in_transit": "TLS 1.3",
+        "at_rest": "AES-256",
+        "database": "Supabase内置加密"
+      },
+      "privacy_compliance": {
+        "gdpr_ready": true,
+        "data_retention": "用户可删除账户",
+        "cookie_policy": "仅必要cookies"
+      }
+    },
+    "api_security": {
+      "rate_limiting": {
+        "public_api": "100请求/分钟",
+        "authenticated_api": "1000请求/分钟",
+        "ai_api": "50请求/小时"
+      },
+      "input_validation": [
+        "SQL注入防护",
+        "XSS防护",
+        "CSRF防护",
+        "文件上传安全检查"
+      ]
+    },
+    "infrastructure_security": {
+      "vercel_security": [
+        "自动SSL证书",
+        "DDoS防护",
+        "IP白名单（管理功能）"
+      ],
+      "supabase_security": [
+        "Row Level Security",
+        "数据库连接池",
+        "自动备份"
+      ]
+    }
+  },
+  "performance_optimization": {
+    "frontend_optimization": {
+      "code_splitting": [
+        "路由级别代码分割",
+        "组件懒加载",
+        "第三方库按需加载"
+      ],
+      "asset_optimization": [
+        "图片WebP格式转换",
+        "SVG图标优化",
+        "CSS/JS压缩",
+        "Gzip压缩"
+      ],
+      "caching_strategy": [
+        "服务工作者缓存",
+        "浏览器缓存策略",
+        "CDN缓存配置"
+      ]
+    },
+    "backend_optimization": {
+      "database_optimization": [
+        "查询索引优化",
+        "连接池配置",
+        "查询结果缓存",
+        "分页查询优化"
+      ],
+      "api_optimization": [
+        "响应压缩",
+        "数据预加载",
+        "批量操作API",
+        "GraphQL（可选）"
+      ]
+    },
+    "monitoring_analytics": {
+      "performance_monitoring": [
+        "Core Web Vitals",
+        "API响应时间",
+        "错误率监控",
+        "用户体验指标"
+      ],
+      "tools": [
+        "Vercel Analytics",
+        "Google Analytics",
+        "Sentry错误监控"
+      ]
+    }
+  },
+  "migration_strategy": {
+    "migration_phases": {
+      "phase_1_preparation": {
+        "duration": "1周",
+        "tasks": [
+          "环境搭建和配置",
+          "数据库表结构创建",
+          "基础组件开发",
+          "样式系统迁移"
+        ],
+        "deliverables": [
+          "开发环境配置",
+          "数据库schema",
+          "UI组件库"
+        ]
+      },
+      "phase_2_core_features": {
+        "duration": "2-3周",
+        "tasks": [
+          "案例展示功能迁移",
+          "搜索筛选功能重构",
+          "用户认证集成",
+          "基础管理功能"
+        ],
+        "deliverables": [
+          "核心功能模块",
+          "用户系统",
+          "基础API"
+        ]
+      },
+      "phase_3_enhanced_features": {
+        "duration": "2周",
+        "tasks": [
+          "文件上传功能",
+          "图表可视化",
+          "主题切换",
+          "响应式优化"
+        ],
+        "deliverables": [
+          "完整功能集",
+          "移动端适配"
+        ]
+      },
+      "phase_4_ai_integration": {
+        "duration": "2-3周",
+        "tasks": [
+          "AI搜索功能",
+          "AI图片功能",
+          "AI内容生成",
+          "功能测试优化"
+        ],
+        "deliverables": [
+          "AI功能模块",
+          "完整系统"
+        ]
+      }
+    },
+    "data_migration": {
+      "current_state": "静态HTML中的演示数据",
+      "migration_steps": [
+        "提取现有案例数据",
+        "数据格式标准化",
+        "导入到Supabase数据库",
+        "数据完整性验证"
+      ],
+      "data_mapping": {
+        "案例信息": "cases表",
+        "图片资源": "case_images表 + Supabase Storage",
+        "分类信息": "categories表"
+      }
+    },
+    "testing_strategy": {
+      "unit_testing": "Vue Test Utils + Jest",
+      "integration_testing": "Cypress",
+      "performance_testing": "Lighthouse CI",
+      "compatibility_testing": "多浏览器测试"
+    },
+    "deployment_process": {
+      "staging_environment": "Vercel预览部署",
+      "production_deployment": "GitHub Actions自动化",
+      "rollback_strategy": "Git版本回滚",
+      "monitoring": "部署后健康检查"
+    }
+  }
+}

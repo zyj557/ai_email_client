@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ecological-restoration",
+    "name": "生态修复",
+    "description": "包括退耕还林、植被恢复、生物多样性保护等生态修复措施",
+    "icon": "🌱",
+    "color": "#2d6a4f",
+    "subcategories": [
+      { "id": "reforestation", "name": "退耕还林", "count": 15 },
+      { "id": "vegetation-restoration", "name": "植被恢复", "count": 12 },
+      { "id": "biodiversity", "name": "生物多样性保护", "count": 8 }
+    ]
+  },
+  {
+    "id": "engineering-measures",
+    "name": "工程措施",
+    "description": "包括淤地坝、梯田、拦沙坝等水土保持工程措施",
+    "icon": "🏗️",
+    "color": "#40916c",
+    "subcategories": [
+      { "id": "siltation-dam", "name": "淤地坝", "count": 20 },
+      { "id": "terraces", "name": "梯田建设", "count": 18 },
+      { "id": "check-dam", "name": "拦沙坝", "count": 10 }
+    ]
+  },
+  {
+    "id": "comprehensive-treatment",
+    "name": "综合治理",
+    "description": "结合生物措施与工程措施的小流域综合治理模式",
+    "icon": "🌿",
+    "color": "#52b788",
+    "subcategories": [
+      { "id": "watershed-management", "name": "小流域治理", "count": 25 },
+      { "id": "eco-economic-system", "name": "生态经济系统", "count": 12 },
+      { "id": "village-model", "name": "村域治理模式", "count": 8 }
+    ]
+  },
+  {
+    "id": "ecological-civilization",
+    "name": "生态文明建设",
+    "description": "生态文明理念指导下的可持续发展实践",
+    "icon": "🏞️",
+    "color": "#74c69d",
+    "subcategories": [
+      { "id": "green-development", "name": "绿色发展", "count": 16 },
+      { "id": "eco-compensation", "name": "生态补偿", "count": 14 },
+      { "id": "sustainable-development", "name": "可持续发展", "count": 18 }
+    ]
+  },
+  {
+    "id": "policy-innovation",
+    "name": "政策创新",
+    "description": "在水土保持和生态建设方面的政策创新实践",
+    "icon": "📋",
+    "color": "#95d5b2",
+    "subcategories": [
+      { "id": "land-use-policy", "name": "土地利用政策", "count": 10 },
+      { "id": "compensation-mechanism", "name": "补偿机制", "count": 12 },
+      { "id": "governance-innovation", "name": "治理创新", "count": 8 }
+    ]
+  }
+]

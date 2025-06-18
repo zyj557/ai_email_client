@@ -1,0 +1,236 @@
+[
+  {
+    "id": "case-001",
+    "title": "延安退耕还林工程",
+    "category": "退耕还林",
+    "region": "陕西延安",
+    "description": "延安市大规模实施退耕还林工程，通过封山禁牧、退耕还林还草等措施，累计退耕还林还草1077.5万亩，森林覆盖率从不到30%提高到53.1%，植被覆盖率从46.35%提高到81.3%。",
+    "detailedDescription": "延安市位于黄土高原中部，是典型的水土流失严重区域。自1999年开始实施退耕还林工程以来，延安市坚持生态优先、绿色发展的理念，累计退耕还林还草1077.5万亩，其中退耕地造林851.3万亩，荒山造林226.2万亩。通过20多年的持续努力，延安的生态环境发生了根本性改变。",
+    "achievementData": {
+      "forestCoverage": { "before": 30, "after": 53.1, "unit": "%" },
+      "vegetationCoverage": { "before": 46.35, "after": 81.3, "unit": "%" },
+      "area": { "total": 1077.5, "unit": "万亩" },
+      "sedimentReduction": { "value": 88, "unit": "%" }
+    },
+    "timeline": [
+      { "year": 1999, "event": "开始实施退耕还林工程" },
+      { "year": 2007, "event": "累计退耕还林500万亩" },
+      { "year": 2015, "event": "森林覆盖率达到45%" },
+      { "year": 2020, "event": "森林覆盖率超过50%" },
+      { "year": 2023, "event": "森林覆盖率达到53.1%" }
+    ],
+    "measures": [
+      "封山禁牧政策",
+      "退耕还林还草",
+      "荒山造林",
+      "生态补偿机制",
+      "产业结构调整"
+    ],
+    "benefits": {
+      "ecological": "生态环境根本改善，水土流失得到有效控制",
+      "economic": "发展林果业、草畜业等特色产业，农民收入稳步增长",
+      "social": "改善人居环境，提升生活质量"
+    },
+    "image": "/images/yanan-reforestation.jpg",
+    "tags": ["退耕还林", "生态修复", "黄土高原", "延安"],
+    "status": "ongoing",
+    "priority": "high",
+    "createTime": "2024-01-15",
+    "updateTime": "2024-06-18"
+  },
+  {
+    "id": "case-002",
+    "title": "高西沟"三三制"模式",
+    "category": "综合治理",
+    "region": "陕西榆林米脂县",
+    "description": "高西沟村创新土地利用模式，实行"三三制"：三分之一植树造林，三分之一种草养牧，三分之一种粮务农，实现了生态与经济的协调发展。",
+    "detailedDescription": "高西沟村位于米脂县城东南20公里处，是典型的黄土丘陵沟壑区。自20世纪50年代开始，在老支书高祖玉的带领下，全村坚持"三三制"土地利用模式，经过70多年的不懈努力，昔日的"穷山恶水"变成了今天的"绿水青山"。",
+    "achievementData": {
+      "soilErosionControl": { "value": 78, "unit": "%" },
+      "grasslandCoverage": { "value": 70, "unit": "%" },
+      "area": { "total": 4, "unit": "平方公里" },
+      "perCapitaIncome": { "before": 200, "after": 15000, "unit": "元" }
+    },
+    "timeline": [
+      { "year": 1953, "event": "开始实施"三三制"土地利用模式" },
+      { "year": 1970, "event": "基本完成荒山绿化" },
+      { "year": 1990, "event": "水土流失治理程度达到60%" },
+      { "year": 2010, "event": "发展特色产业，农民增收明显" },
+      { "year": 2021, "event": "被授予"全国脱贫攻坚楷模"称号" }
+    ],
+    "measures": [
+      "三三制土地利用",
+      "梯田建设",
+      "淤地坝修建",
+      "山地苹果种植",
+      "小米产业发展"
+    ],
+    "benefits": {
+      "ecological": "水土流失治理程度达78%，林草覆盖率达70%",
+      "economic": "发展山地苹果、小米加工等特色产业和乡村旅游",
+      "social": "成为黄土高原治理典型，示范带动作用明显"
+    },
+    "image": "/images/gaoxigou-model.jpg",
+    "tags": ["三三制", "综合治理", "乡村振兴", "米脂"],
+    "status": "completed",
+    "priority": "high",
+    "createTime": "2024-01-20",
+    "updateTime": "2024-06-18"
+  },
+  {
+    "id": "case-003",
+    "title": "黄河古贤水利枢纽工程",
+    "category": "工程措施",
+    "region": "山西吉县-陕西宜川",
+    "description": "黄河古贤水利枢纽工程是黄河中游重要的控制性工程，具有防洪减淤、水量调节、发电等综合效益，对黄河流域生态保护和高质量发展具有重要意义。",
+    "detailedDescription": "古贤水利枢纽工程位于黄河中游晋陕峡谷段，是黄河流域生态保护和高质量发展的重大工程。工程总投资约598亿元，建成后将形成库容129.2亿立方米的大型水库，具有防洪减淤、水量调节、发电等综合效益。",
+    "achievementData": {
+      "reservoirCapacity": { "value": 129.2, "unit": "亿立方米" },
+      "powerGeneration": { "value": 134.9, "unit": "亿千瓦时/年" },
+      "sedimentReduction": { "value": 90, "unit": "%" },
+      "floodControl": { "value": 20000, "unit": "立方米/秒" }
+    },
+    "timeline": [
+      { "year": 2018, "event": "工程可行性研究报告获得批复" },
+      { "year": 2019, "event": "环境影响评价获得批复" },
+      { "year": 2021, "event": "工程开工建设" },
+      { "year": 2025, "event": "预计工程主体完工" },
+      { "year": 2027, "event": "预计工程全面建成" }
+    ],
+    "measures": [
+      "大坝建设",
+      "库区清理",
+      "移民安置",
+      "生态修复",
+      "水质保护"
+    ],
+    "benefits": {
+      "ecological": "减少黄河泥沙下泄，改善下游河道淤积状况",
+      "economic": "年发电量134.9亿千瓦时，提供清洁能源",
+      "social": "改善防洪条件，保障下游人民生命财产安全"
+    },
+    "image": "/images/guxian-project.jpg",
+    "tags": ["水利枢纽", "防洪减淤", "清洁能源", "黄河"],
+    "status": "ongoing",
+    "priority": "high",
+    "createTime": "2024-01-25",
+    "updateTime": "2024-06-18"
+  },
+  {
+    "id": "case-004",
+    "title": "吴起退耕还林示范县",
+    "category": "退耕还林",
+    "region": "陕西延安吴起县",
+    "description": "吴起县是全国退耕还林第一县，率先在全国实施封山禁牧、退耕还林，累计退耕155.5万亩，森林覆盖率由3%提高到72.9%，成为黄土高原生态建设的典型。",
+    "detailedDescription": "吴起县位于黄土高原腹地，原是黄土高原水土流失最严重的地区之一。1998年，吴起县率先在全国实施大规模退耕还林，提出"生态立县"战略，经过20多年的努力，实现了从"黄"到"绿"的历史性转变。",
+    "achievementData": {
+      "forestCoverage": { "before": 3, "after": 72.9, "unit": "%" },
+      "retiredArea": { "value": 155.5, "unit": "万亩" },
+      "sedimentReduction": { "value": 95, "unit": "%" },
+      "airQuality": { "value": 320, "unit": "天/年" }
+    },
+    "timeline": [
+      { "year": 1998, "event": "在全国率先实施退耕还林" },
+      { "year": 2000, "event": "全面推行封山禁牧政策" },
+      { "year": 2005, "event": "森林覆盖率达到30%" },
+      { "year": 2015, "event": "森林覆盖率达到60%" },
+      { "year": 2023, "event": "森林覆盖率达到72.9%" }
+    ],
+    "measures": [
+      "全面封山禁牧",
+      "大规模退耕还林",
+      "舍饲养殖",
+      "生态补偿",
+      "产业转型"
+    ],
+    "benefits": {
+      "ecological": "森林覆盖率提高69.9个百分点，生态环境根本好转",
+      "economic": "发展现代农业和生态旅游，农民收入大幅增长",
+      "social": "获得联合国环境规划署"全球500佳"奖"
+    },
+    "image": "/images/wuqi-reforestation.jpg",
+    "tags": ["退耕还林", "封山禁牧", "生态立县", "吴起"],
+    "status": "completed",
+    "priority": "medium",
+    "createTime": "2024-02-01",
+    "updateTime": "2024-06-18"
+  },
+  {
+    "id": "case-005",
+    "title": "安塞淤地坝建设工程",
+    "category": "工程措施",
+    "region": "陕西延安安塞区",
+    "description": "安塞区大力推进淤地坝建设，共建成各类淤地坝1300多座，拦泥淤地6万多亩，有效控制了水土流失，增加了农业用地，提高了粮食产量。",
+    "detailedDescription": "安塞区位于黄土高原腹地，是典型的丘陵沟壑区。通过大规模建设淤地坝，不仅有效控制了水土流失，还增加了农业用地，实现了生态效益与经济效益的双赢。",
+    "achievementData": {
+      "damNumber": { "value": 1300, "unit": "座" },
+      "siltageLand": { "value": 6, "unit": "万亩" },
+      "sedimentReduction": { "value": 85, "unit": "%" },
+      "grainIncrease": { "value": 30, "unit": "%" }
+    },
+    "timeline": [
+      { "year": 1980, "event": "开始小规模淤地坝建设" },
+      { "year": 1990, "event": "大规模推进淤地坝建设" },
+      { "year": 2000, "event": "建成淤地坝500座" },
+      { "year": 2010, "event": "建成淤地坝1000座" },
+      { "year": 2023, "event": "建成各类淤地坝1300多座" }
+    ],
+    "measures": [
+      "科学规划坝系",
+      "标准化建设",
+      "生态型设计",
+      "智能化监管",
+      "综合利用"
+    ],
+    "benefits": {
+      "ecological": "有效拦截泥沙，减少水土流失85%",
+      "economic": "增加农业用地6万多亩，粮食产量提高30%",
+      "social": "改善农业生产条件，促进农民增收"
+    },
+    "image": "/images/ansai-siltation-dam.jpg",
+    "tags": ["淤地坝", "水土保持", "工程措施", "安塞"],
+    "status": "ongoing",
+    "priority": "medium",
+    "createTime": "2024-02-05",
+    "updateTime": "2024-06-18"
+  },
+  {
+    "id": "case-006",
+    "title": "黄陵梯田建设项目",
+    "category": "工程措施",
+    "region": "陕西延安黄陵县",
+    "description": "黄陵县大力推进梯田建设，累计建成高标准梯田40万亩，有效控制了坡面水土流失，提高了土地利用率和农业产出效益。",
+    "detailedDescription": "黄陵县地处黄土高原丘陵沟壑区，坡面水土流失严重。通过科学规划、统一标准、集中连片的梯田建设，不仅控制了水土流失，还为现代农业发展奠定了基础。",
+    "achievementData": {
+      "terraceArea": { "value": 40, "unit": "万亩" },
+      "soilRetention": { "value": 90, "unit": "%" },
+      "waterRetention": { "value": 80, "unit": "%" },
+      "yieldIncrease": { "value": 40, "unit": "%" }
+    },
+    "timeline": [
+      { "year": 1985, "event": "开始推广梯田建设技术" },
+      { "year": 1995, "event": "建成梯田10万亩" },
+      { "year": 2005, "event": "建成梯田20万亩" },
+      { "year": 2015, "event": "建成梯田30万亩" },
+      { "year": 2023, "event": "建成高标准梯田40万亩" }
+    ],
+    "measures": [
+      "科学规划设计",
+      "机械化建设",
+      "标准化施工",
+      "配套设施完善",
+      "后期管护"
+    ],
+    "benefits": {
+      "ecological": "有效控制坡面水土流失，保土保水效果显著",
+      "economic": "提高土地利用率，农业产出效益增加40%",
+      "social": "改善农业生产条件，促进农业现代化发展"
+    },
+    "image": "/images/huangling-terraces.jpg",
+    "tags": ["梯田建设", "水土保持", "农业现代化", "黄陵"],
+    "status": "ongoing",
+    "priority": "medium",
+    "createTime": "2024-02-10",
+    "updateTime": "2024-06-18"
+  }
+]

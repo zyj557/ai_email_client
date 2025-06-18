@@ -1,0 +1,363 @@
+{
+  "environment_setup": {
+    "prerequisites": {
+      "accounts_required": [
+        "GitHub账户（用于代码管理和Pages部署）",
+        "Vercel账户（用于API部署）",
+        "Supabase账户（用于数据库服务）",
+        "OpenAI账户（用于AI服务）",
+        "百度AI账户（备用AI服务）"
+      ],
+      "local_environment": [
+        "Node.js 18+",
+        "npm或yarn包管理器",
+        "Git版本控制",
+        "VS Code或其他代码编辑器"
+      ]
+    },
+    "repository_setup": {
+      "github_repository": {
+        "steps": [
+          "创建GitHub仓库：loess-plateau-case-library",
+          "设置仓库为公开（GitHub Pages需要）",
+          "启用GitHub Actions",
+          "配置分支保护规则"
+        ],
+        "branch_strategy": {
+          "main": "生产环境分支",
+          "develop": "开发环境分支",
+          "feature/*": "功能开发分支"
+        }
+      }
+    },
+    "vercel_setup": {
+      "project_creation": [
+        "登录Vercel控制台",
+        "连接GitHub仓库",
+        "配置构建设置",
+        "设置环境变量"
+      ],
+      "build_configuration": {
+        "framework": "Vue.js",
+        "build_command": "npm run build",
+        "output_directory": "dist",
+        "install_command": "npm install"
+      }
+    },
+    "supabase_setup": {
+      "project_creation": [
+        "创建Supabase项目",
+        "选择数据库区域（建议：Singapore）",
+        "配置数据库设置",
+        "启用必要的扩展"
+      ],
+      "database_extensions": [
+        "pgvector - 向量搜索支持",
+        "uuid-ossp - UUID生成",
+        "pg_stat_statements - 性能监控"
+      ]
+    }
+  },
+  "database_migration": {
+    "database_schema": {
+      "tables_creation": [
+        {
+          "table": "users",
+          "sql": "\nCREATE TABLE users (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    email VARCHAR UNIQUE NOT NULL,\n    username VARCHAR UNIQUE,\n    role user_role DEFAULT 'viewer',\n    avatar_url TEXT,\n    created_at TIMESTAMP DEFAULT NOW(),\n    updated_at TIMESTAMP DEFAULT NOW()\n);\n\n-- 创建用户角色枚举\nCREATE TYPE user_role AS ENUM ('admin', 'editor', 'viewer');\n\n-- 创建索引\nCREATE INDEX idx_users_email ON users(email);\nCREATE INDEX idx_users_username ON users(username);\n                    "
+        },
+        {
+          "table": "categories",
+          "sql": "\nCREATE TABLE categories (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    name VARCHAR NOT NULL,\n    slug VARCHAR UNIQUE NOT NULL,\n    description TEXT,\n    icon VARCHAR,\n    color VARCHAR,\n    parent_id UUID REFERENCES categories(id),\n    sort_order INTEGER DEFAULT 0,\n    is_active BOOLEAN DEFAULT TRUE,\n    created_at TIMESTAMP DEFAULT NOW()\n);\n\n-- 创建索引\nCREATE INDEX idx_categories_slug ON categories(slug);\nCREATE INDEX idx_categories_parent_id ON categories(parent_id);\n                    "
+        },
+        {
+          "table": "cases",
+          "sql": "\nCREATE TABLE cases (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    title VARCHAR NOT NULL,\n    subtitle VARCHAR,\n    description TEXT,\n    content JSONB,\n    category VARCHAR,\n    tags TEXT[],\n    location JSONB,\n    project_scale VARCHAR,\n    investment_amount DECIMAL,\n    implementation_period JSONB,\n    status case_status DEFAULT 'draft',\n    featured BOOLEAN DEFAULT FALSE,\n    view_count INTEGER DEFAULT 0,\n    author_id UUID REFERENCES users(id),\n    created_at TIMESTAMP DEFAULT NOW(),\n    updated_at TIMESTAMP DEFAULT NOW(),\n    published_at TIMESTAMP\n);\n\n-- 创建案例状态枚举\nCREATE TYPE case_status AS ENUM ('draft', 'published', 'archived');\n\n-- 创建索引\nCREATE INDEX idx_cases_category ON cases(category);\nCREATE INDEX idx_cases_status ON cases(status);\nCREATE INDEX idx_cases_featured ON cases(featured);\nCREATE INDEX idx_cases_published_at ON cases(published_at);\nCREATE INDEX idx_cases_tags ON cases USING GIN(tags);\n                    "
+        },
+        {
+          "table": "case_images",
+          "sql": "\nCREATE TABLE case_images (\n    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),\n    case_id UUID REFERENCES cases(id) ON DELETE CASCADE,\n    url TEXT NOT NULL,\n    thumbnail_url TEXT,\n    alt_text VARCHAR,\n    caption TEXT,\n    sort_order INTEGER DEFAULT 0,\n    file_size INTEGER,\n    dimensions JSONB,\n    is_cover BOOLEAN DEFAULT FALSE,\n    uploaded_by UUID REFERENCES users(id),\n    created_at TIMESTAMP DEFAULT NOW()\n);\n\n-- 创建索引\nCREATE INDEX idx_case_images_case_id ON case_images(case_id);\nCREATE INDEX idx_case_images_sort_order ON case_images(sort_order);\n                    "
+        }
+      ]
+    },
+    "rls_policies": {
+      "setup_instructions": [
+        "启用Row Level Security",
+        "创建安全策略",
+        "配置用户权限",
+        "测试访问控制"
+      ],
+      "policies": [
+        {
+          "table": "users",
+          "policy": "\n-- 用户只能查看自己的信息\nALTER TABLE users ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY \"Users can view own profile\" ON users\n    FOR SELECT USING (auth.uid() = id);\n\nCREATE POLICY \"Users can update own profile\" ON users\n    FOR UPDATE USING (auth.uid() = id);\n                    "
+        },
+        {
+          "table": "cases",
+          "policy": "\n-- 案例访问策略\nALTER TABLE cases ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY \"Published cases are viewable by everyone\" ON cases\n    FOR SELECT USING (status = 'published');\n\nCREATE POLICY \"Authors can view own cases\" ON cases\n    FOR SELECT USING (auth.uid() = author_id);\n\nCREATE POLICY \"Editors can manage cases\" ON cases\n    FOR ALL USING (\n        EXISTS (\n            SELECT 1 FROM users \n            WHERE id = auth.uid() \n            AND role IN ('admin', 'editor')\n        )\n    );\n                    "
+        }
+      ]
+    },
+    "data_seeding": {
+      "initial_data": [
+        {
+          "description": "创建默认分类",
+          "sql": "\nINSERT INTO categories (name, slug, description, icon, color) VALUES\n('水土保持', 'water-conservation', '水土流失治理相关案例', 'fas fa-tint', '#4A90E2'),\n('生态修复', 'ecological-restoration', '生态环境修复案例', 'fas fa-leaf', '#7ED321'),\n('退耕还林', 'reforestation', '退耕还林还草案例', 'fas fa-tree', '#50E3C2'),\n('小流域治理', 'watershed-management', '小流域综合治理案例', 'fas fa-water', '#B8E986'),\n('生态农业', 'ecological-agriculture', '生态农业发展案例', 'fas fa-seedling', '#F5A623');\n                    "
+        },
+        {
+          "description": "创建管理员用户",
+          "sql": "\n-- 注意：实际用户需要通过Supabase Auth创建\n-- 这里只是示例数据结构\nINSERT INTO users (email, username, role) VALUES\n('admin@example.com', 'admin', 'admin'),\n('editor@example.com', 'editor', 'editor');\n                    "
+        }
+      ]
+    }
+  },
+  "frontend_deployment": {
+    "project_setup": {
+      "vue_project_creation": [
+        "使用Vite创建Vue项目",
+        "配置TypeScript支持",
+        "安装必要依赖",
+        "配置开发环境"
+      ],
+      "commands": [
+        "npm create vue@latest loess-plateau-frontend",
+        "cd loess-plateau-frontend",
+        "npm install",
+        "npm install @supabase/supabase-js pinia vue-router",
+        "npm install bootstrap @fortawesome/fontawesome-free",
+        "npm install chart.js vue-chartjs"
+      ]
+    },
+    "configuration_files": {
+      "vite_config": {
+        "file": "vite.config.ts",
+        "content": "\nimport { defineConfig } from 'vite'\nimport vue from '@vitejs/plugin-vue'\nimport { resolve } from 'path'\n\nexport default defineConfig({\n  plugins: [vue()],\n  resolve: {\n    alias: {\n      '@': resolve(__dirname, 'src'),\n    },\n  },\n  build: {\n    outDir: 'dist',\n    assetsDir: 'assets',\n    rollupOptions: {\n      output: {\n        chunkFileNames: 'assets/js/[name]-[hash].js',\n        entryFileNames: 'assets/js/[name]-[hash].js',\n        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'\n      }\n    }\n  },\n  server: {\n    host: true,\n    port: 3000\n  }\n})\n                "
+      },
+      "env_config": {
+        "file": ".env.example",
+        "content": "\n# Supabase配置\nVITE_SUPABASE_URL=your_supabase_url\nVITE_SUPABASE_ANON_KEY=your_supabase_anon_key\n\n# Vercel API配置\nVITE_API_BASE_URL=https://your-project.vercel.app/api\n\n# AI服务配置（前端不直接使用，通过API调用）\n# OPENAI_API_KEY=your_openai_key (仅后端使用)\n                "
+      }
+    },
+    "github_actions": {
+      "workflow_file": ".github/workflows/deploy.yml",
+      "content": "\nname: Deploy to GitHub Pages\n\non:\n  push:\n    branches: [ main ]\n  pull_request:\n    branches: [ main ]\n\njobs:\n  build-and-deploy:\n    runs-on: ubuntu-latest\n    \n    steps:\n    - name: Checkout\n      uses: actions/checkout@v3\n      \n    - name: Setup Node.js\n      uses: actions/setup-node@v3\n      with:\n        node-version: '18'\n        cache: 'npm'\n        \n    - name: Install dependencies\n      run: npm ci\n      \n    - name: Build\n      run: npm run build\n      env:\n        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}\n        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}\n        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}\n        \n    - name: Deploy to GitHub Pages\n      uses: peaceiris/actions-gh-pages@v3\n      if: github.ref == 'refs/heads/main'\n      with:\n        github_token: ${{ secrets.GITHUB_TOKEN }}\n        publish_dir: ./dist\n            "
+    }
+  },
+  "backend_deployment": {
+    "vercel_functions": {
+      "project_structure": "\napi/\n├── auth/\n│   ├── login.ts\n│   ├── register.ts\n│   └── refresh.ts\n├── cases/\n│   ├── index.ts\n│   ├── [id].ts\n│   ├── create.ts\n│   ├── update.ts\n│   └── delete.ts\n├── upload/\n│   ├── image.ts\n│   └── file.ts\n├── ai/\n│   ├── search.ts\n│   ├── images/\n│   │   ├── search.ts\n│   │   └── generate.ts\n│   ├── content/\n│   │   ├── generate.ts\n│   │   └── analyze.ts\n│   └── chat/\n│       └── assistant.ts\n└── utils/\n    ├── supabase.ts\n    ├── auth.ts\n    ├── validation.ts\n    └── errors.ts\n            ",
+      "configuration_files": [
+        {
+          "file": "vercel.json",
+          "content": "\n{\n  \"functions\": {\n    \"api/**/*.ts\": {\n      \"runtime\": \"nodejs18.x\"\n    }\n  },\n  \"env\": {\n    \"SUPABASE_URL\": \"@supabase-url\",\n    \"SUPABASE_SERVICE_KEY\": \"@supabase-service-key\",\n    \"OPENAI_API_KEY\": \"@openai-api-key\",\n    \"BAIDU_API_KEY\": \"@baidu-api-key\",\n    \"STABILITY_API_KEY\": \"@stability-api-key\"\n  },\n  \"build\": {\n    \"env\": {\n      \"NPM_FLAGS\": \"--production=false\"\n    }\n  }\n}\n                    "
+        },
+        {
+          "file": "package.json",
+          "content": "\n{\n  \"name\": \"loess-plateau-api\",\n  \"version\": \"1.0.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"vercel dev\",\n    \"build\": \"tsc\",\n    \"deploy\": \"vercel --prod\"\n  },\n  \"dependencies\": {\n    \"@supabase/supabase-js\": \"^2.38.0\",\n    \"openai\": \"^4.20.0\",\n    \"cors\": \"^2.8.5\",\n    \"joi\": \"^17.11.0\",\n    \"jsonwebtoken\": \"^9.0.2\",\n    \"multer\": \"^1.4.5-lts.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"^20.8.0\",\n    \"@types/cors\": \"^2.8.15\",\n    \"@types/jsonwebtoken\": \"^9.0.5\",\n    \"@types/multer\": \"^1.4.8\",\n    \"typescript\": \"^5.2.0\"\n  }\n}\n                    "
+        }
+      ]
+    },
+    "api_examples": [
+      {
+        "file": "api/cases/index.ts",
+        "description": "案例列表API",
+        "content": "\nimport { VercelRequest, VercelResponse } from '@vercel/node';\nimport { createClient } from '@supabase/supabase-js';\nimport { corsHeaders, handleCors } from '../utils/cors';\n\nconst supabase = createClient(\n  process.env.SUPABASE_URL!,\n  process.env.SUPABASE_SERVICE_KEY!\n);\n\nexport default async function handler(req: VercelRequest, res: VercelResponse) {\n  // 处理CORS\n  if (req.method === 'OPTIONS') {\n    return handleCors(req, res);\n  }\n\n  res.setHeader('Access-Control-Allow-Origin', '*');\n  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');\n  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');\n\n  if (req.method === 'GET') {\n    try {\n      const { \n        page = 1, \n        limit = 20, \n        category, \n        search, \n        featured \n      } = req.query;\n\n      let query = supabase\n        .from('cases')\n        .select(`\n          id, title, subtitle, description, category, tags,\n          location, featured, view_count, created_at, published_at,\n          case_images(url, thumbnail_url, alt_text, is_cover)\n        `)\n        .eq('status', 'published')\n        .order('published_at', { ascending: false });\n\n      // 应用筛选条件\n      if (category) {\n        query = query.eq('category', category);\n      }\n      \n      if (featured === 'true') {\n        query = query.eq('featured', true);\n      }\n      \n      if (search) {\n        query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);\n      }\n\n      // 分页\n      const offset = (Number(page) - 1) * Number(limit);\n      query = query.range(offset, offset + Number(limit) - 1);\n\n      const { data, error, count } = await query;\n\n      if (error) {\n        throw error;\n      }\n\n      res.status(200).json({\n        data: data || [],\n        pagination: {\n          page: Number(page),\n          limit: Number(limit),\n          total: count || 0,\n          totalPages: Math.ceil((count || 0) / Number(limit))\n        },\n        status: 'success'\n      });\n\n    } catch (error) {\n      console.error('Cases API Error:', error);\n      res.status(500).json({\n        error: 'Internal server error',\n        message: error instanceof Error ? error.message : 'Unknown error',\n        status: 'error'\n      });\n    }\n  } else {\n    res.status(405).json({ error: 'Method not allowed' });\n  }\n}\n                "
+      }
+    ]
+  },
+  "ai_services_setup": {
+    "openai_setup": {
+      "account_creation": [
+        "注册OpenAI账户",
+        "验证手机号和邮箱",
+        "配置付费方式",
+        "获取API密钥"
+      ],
+      "api_configuration": {
+        "models_to_use": [
+          "gpt-4-turbo-preview (文本生成)",
+          "gpt-3.5-turbo (快速响应)",
+          "text-embedding-ada-002 (向量嵌入)",
+          "dall-e-3 (图像生成)"
+        ],
+        "rate_limits": {
+          "gpt-4": "40,000 TPM (Tokens Per Minute)",
+          "gpt-3.5-turbo": "90,000 TPM",
+          "embeddings": "1,000,000 TPM",
+          "dall-e-3": "5 images/minute"
+        }
+      }
+    },
+    "backup_services": {
+      "baidu_ai": {
+        "setup_steps": [
+          "注册百度智能云账户",
+          "开通文心一言服务",
+          "获取API Key和Secret Key",
+          "配置应用权限"
+        ],
+        "models": [
+          "ERNIE-Bot-turbo (文本生成)",
+          "ERNIE-ViLG (图像生成)"
+        ]
+      }
+    },
+    "api_integration": {
+      "service_wrapper": {
+        "file": "api/utils/ai-services.ts",
+        "content": "\nimport OpenAI from 'openai';\n\ninterface AIServiceConfig {\n  provider: 'openai' | 'baidu';\n  apiKey: string;\n  baseURL?: string;\n}\n\nclass AIServiceManager {\n  private openai: OpenAI;\n  private fallbackServices: Map<string, any> = new Map();\n\n  constructor() {\n    this.openai = new OpenAI({\n      apiKey: process.env.OPENAI_API_KEY,\n    });\n  }\n\n  async generateText(prompt: string, options: any = {}): Promise<string> {\n    try {\n      const response = await this.openai.chat.completions.create({\n        model: options.model || 'gpt-4-turbo-preview',\n        messages: [{ role: 'user', content: prompt }],\n        max_tokens: options.maxTokens || 1000,\n        temperature: options.temperature || 0.7,\n      });\n\n      return response.choices[0]?.message?.content || '';\n    } catch (error) {\n      console.error('OpenAI API Error:', error);\n      // 回退到备用服务\n      return this.fallbackTextGeneration(prompt, options);\n    }\n  }\n\n  async generateEmbedding(text: string): Promise<number[]> {\n    try {\n      const response = await this.openai.embeddings.create({\n        model: 'text-embedding-ada-002',\n        input: text,\n      });\n\n      return response.data[0]?.embedding || [];\n    } catch (error) {\n      console.error('Embedding API Error:', error);\n      throw new Error('向量生成失败');\n    }\n  }\n\n  async generateImage(prompt: string, options: any = {}): Promise<string> {\n    try {\n      const response = await this.openai.images.generate({\n        model: 'dall-e-3',\n        prompt: prompt,\n        size: options.size || '1024x1024',\n        quality: options.quality || 'standard',\n        n: 1,\n      });\n\n      return response.data[0]?.url || '';\n    } catch (error) {\n      console.error('Image Generation Error:', error);\n      throw new Error('图像生成失败');\n    }\n  }\n\n  private async fallbackTextGeneration(prompt: string, options: any): Promise<string> {\n    // 实现百度AI等备用服务\n    throw new Error('备用服务暂未实现');\n  }\n}\n\nexport const aiService = new AIServiceManager();\n                "
+      }
+    }
+  },
+  "security_configuration": {
+    "authentication_setup": {
+      "supabase_auth": [
+        "启用邮箱认证",
+        "配置OAuth提供商",
+        "设置JWT密钥",
+        "配置重定向URL"
+      ],
+      "oauth_providers": {
+        "google": {
+          "steps": [
+            "在Google Cloud Console创建OAuth应用",
+            "获取Client ID和Client Secret",
+            "在Supabase中配置Google OAuth",
+            "测试OAuth登录流程"
+          ]
+        }
+      }
+    },
+    "api_security": {
+      "rate_limiting": {
+        "configuration": "\n// api/utils/rate-limit.ts\nexport const rateLimitConfig = {\n  public: {\n    windowMs: 60 * 1000, // 1分钟\n    max: 100 // 最多100个请求\n  },\n  authenticated: {\n    windowMs: 60 * 1000,\n    max: 1000 // 认证用户1000个请求\n  },\n  ai: {\n    windowMs: 60 * 60 * 1000, // 1小时\n    max: 50 // AI功能50个请求\n  }\n};\n                ",
+        "implementation": "使用Vercel Edge Config实现分布式限流"
+      },
+      "input_validation": [
+        "使用Joi进行请求参数验证",
+        "SQL注入防护",
+        "XSS攻击防护",
+        "文件上传安全检查"
+      ]
+    },
+    "environment_variables": {
+      "production_secrets": [
+        "SUPABASE_URL",
+        "SUPABASE_SERVICE_KEY",
+        "OPENAI_API_KEY",
+        "BAIDU_API_KEY",
+        "JWT_SECRET",
+        "ENCRYPTION_KEY"
+      ],
+      "security_headers": "\n// 安全头配置\nconst securityHeaders = {\n  'X-Frame-Options': 'DENY',\n  'X-Content-Type-Options': 'nosniff',\n  'Referrer-Policy': 'strict-origin-when-cross-origin',\n  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',\n  'Content-Security-Policy': \"default-src 'self'; script-src 'self' 'unsafe-eval'\"\n};\n            "
+    }
+  },
+  "monitoring_setup": {
+    "vercel_analytics": {
+      "setup_steps": [
+        "在Vercel项目中启用Analytics",
+        "添加Vercel Analytics包",
+        "配置自定义事件跟踪",
+        "设置性能监控"
+      ],
+      "implementation": "\n// 在main.ts中添加\nimport { inject } from '@vercel/analytics';\n\ninject({\n  debug: process.env.NODE_ENV === 'development'\n});\n            "
+    },
+    "error_monitoring": {
+      "sentry_setup": [
+        "注册Sentry账户",
+        "创建Vue.js项目",
+        "安装Sentry SDK",
+        "配置错误追踪"
+      ],
+      "configuration": "\n// sentry.config.ts\nimport * as Sentry from '@sentry/vue';\n\nSentry.init({\n  app,\n  dsn: process.env.VITE_SENTRY_DSN,\n  environment: process.env.NODE_ENV,\n  tracesSampleRate: 1.0,\n});\n            "
+    },
+    "performance_monitoring": {
+      "metrics_to_track": [
+        "API响应时间",
+        "页面加载时间",
+        "数据库查询性能",
+        "AI API调用延迟",
+        "错误率统计"
+      ],
+      "custom_monitoring": "\n// 性能监控工具\nexport class PerformanceMonitor {\n  static trackAPICall(endpoint: string, duration: number) {\n    // 发送到分析服务\n    analytics.track('api_call', {\n      endpoint,\n      duration,\n      timestamp: Date.now()\n    });\n  }\n\n  static trackUserAction(action: string, metadata?: any) {\n    analytics.track('user_action', {\n      action,\n      metadata,\n      timestamp: Date.now()\n    });\n  }\n}\n            "
+    }
+  },
+  "testing_checklist": {
+    "pre_deployment_tests": [
+      "所有单元测试通过",
+      "集成测试验证",
+      "API端点功能测试",
+      "数据库连接测试",
+      "AI服务集成测试",
+      "用户认证流程测试",
+      "文件上传功能测试",
+      "搜索功能准确性测试"
+    ],
+    "performance_tests": [
+      "页面加载速度测试",
+      "API响应时间测试",
+      "并发用户测试",
+      "数据库查询性能测试",
+      "移动端响应式测试",
+      "跨浏览器兼容性测试"
+    ],
+    "security_tests": [
+      "身份验证测试",
+      "授权控制测试",
+      "SQL注入防护测试",
+      "XSS攻击防护测试",
+      "CSRF防护测试",
+      "文件上传安全测试",
+      "API限流测试",
+      "数据加密验证"
+    ],
+    "user_acceptance_tests": [
+      "案例浏览功能",
+      "搜索和筛选功能",
+      "AI功能可用性",
+      "管理后台功能",
+      "文件上传管理",
+      "用户注册登录",
+      "主题切换功能",
+      "移动端用户体验"
+    ]
+  },
+  "maintenance_procedures": {
+    "daily_maintenance": [
+      "检查系统运行状态",
+      "监控API响应时间",
+      "查看错误日志",
+      "检查AI服务使用量",
+      "备份关键数据"
+    ],
+    "weekly_maintenance": [
+      "性能报告分析",
+      "用户反馈处理",
+      "安全更新检查",
+      "数据库性能优化",
+      "成本使用分析"
+    ],
+    "monthly_maintenance": [
+      "功能使用统计分析",
+      "系统性能评估",
+      "安全漏洞扫描",
+      "依赖包更新",
+      "备份策略验证"
+    ],
+    "emergency_procedures": {
+      "service_outage": [
+        "快速故障诊断",
+        "切换到备用服务",
+        "用户通知机制",
+        "问题修复流程",
+        "服务恢复验证"
+      ],
+      "security_incident": [
+        "立即隔离受影响系统",
+        "评估安全威胁范围",
+        "实施临时防护措施",
+        "通知相关用户",
+        "修复安全漏洞"
+      ]
+    }
+  }
+}
